@@ -23,8 +23,13 @@ func HandleHTTP(w io.Writer, args []string) error {
 	if fs.NArg() != 1 {
 		return ErrNoServerSpecified
 	}
-	c := httpConfig{verb: v}
-	c.url = fs.Arg(0)
-	fmt.Fprintln(w, "executing http command")
-	return nil
+	switch v {
+	case "GET", "POST", "HEAD":
+		c := httpConfig{verb: v}
+		c.url = fs.Arg(0)
+		fmt.Fprintln(w, "executing http command")
+		return nil
+	default:
+		return ErrNoAllowedMethod
+	}
 }

@@ -35,7 +35,7 @@ func handleCommand(w io.Writer, args []string) error {
 }
 
 func printUsage(w io.Writer) {
-	fmt.Fprintf(w, "Usage: %s [cmd-a|cmd-b] -h\n", os.Args[0])
+	fmt.Fprintf(w, "Usage: %s [http|grpc] -h\n", os.Args[0])
 	cmd.HandleHTTP(w, []string{"-h"})
 	cmd.HandleGRPC(w, []string{"-h"})
 }
