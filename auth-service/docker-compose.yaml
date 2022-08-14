@@ -1,0 +1,42 @@
+version: "3"
+services:
+  auth_service:
+    container_name: auth_service
+    build:
+      context: .
+    labels:
+      - traefik.http.routers.whoami.rule=Host(`auth_service.docker.localhost`)
+      - traefik.http.services.auth_service.loadbalancer.server.port=8080
+    environment:
+      PORT: 8080
+      DB_URI: postgres://postgres:root@auth_service_db:5432/accounts?sslmode=disable
+    depends_on:
+      auth_service_db:
+        condition: service_healthy
+    links:
+      - auth_service_db
+  auth_service_db:
+    image: postgres:14.3
+    restart: always
+    container_name: auth_service_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: accounts
+      POSTGRES_PASSWORD: root
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+  reverse-proxy:
+    container_name: reverse-proxy
+    image: traefik:v2.8
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
