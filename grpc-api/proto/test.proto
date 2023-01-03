@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package main;
+
+option go_package = "./proto";
+
+service TestService {
+    rpc Echo(EchoRequest) returns (EchoResponse) {}
+    rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
+}
+
+message EchoRequest {
+    string msg = 1;
+}
+
+message EchoResponse {
+    string uuid = 1;
+}
+
+message GetUserRequest {
+    string uuid = 1;
+}
+
+message GetUserResponse {
+    string name = 1;
+    int32 age = 2;
+    string email = 3;
+}
