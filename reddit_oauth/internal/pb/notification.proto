@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = "./internal/pb";
+
+service NotificatorService {
+    rpc Create (NotificationRequest) returns (NotificationResponse);
+}
+
+message NotificationRequest {
+    string email = 1;
+    string content = 2;
+}
+
+message NotificationResponse {
+    bool done = 1;
+}
