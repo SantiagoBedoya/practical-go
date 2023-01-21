@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "server_streaming/proto";
+
+message ExecuteRequest {
+  string data = 1;
+}
+
+message ExecuteResponse {
+  string data = 1;
+}
+
+service SomethingService {
+  rpc Execute (ExecuteRequest) returns (stream ExecuteResponse);
+}
